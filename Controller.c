@@ -4,14 +4,30 @@
 
 #include "ehs.h";
 
-/** Allows the robot to drive around in tank mode.
+/** Allows the robot to drive around in non-tank mode.
  */
 
 task main()
 {
 	while (true)
 	{
-			motor[right] = quadraticAcceleration(vexRT[Ch3]);
-			motor[left] = quadraticAcceleration(vexRT[Ch2]);
+			if(vexRT[Ch4] = 0){
+
+				motor[right] = quadraticAcceleration(vexRT[Ch2]);
+				motor[left] = quadraticAcceleration(vexRT[Ch2]);
+			} else if(vexRT[Ch4] != 0){
+					ch4val = vexRT[Ch4]
+					if(ch4val > 64){
+						ch4val = 64 + (ch4val - 64)/2;
+						motor[right] = quadraticAcceleration(vexRT[Ch2]) - ch4val;
+						motor[left] = quadraticAcceleration(vexRT[Ch2]) + ch4val;
+					} else {
+						motor[right] = quadraticAcceleration(vexRT[Ch2]) - ch4val;
+						motor[left] = quadraticAcceleration(vexRT[Ch2]) + ch4val;
+				}
+
+
+				}
+			}
 	}
 }
