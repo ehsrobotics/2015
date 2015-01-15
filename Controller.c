@@ -30,7 +30,7 @@ task main() {
 				motor[left] = quadraticAcceleration(vexRT[Ch2]) + ch4val;
 			}
 		}
-		lift(vexRT[Ch1]);
+		liftManual(vexRT[Ch1]);
 	}
 }
 

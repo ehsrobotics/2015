@@ -5,13 +5,17 @@
  *  Takes a value between -127 and 127. It outputs an int between -127 and 127 along
  *  a quadratic curve. The equation is \f$y = \frac{1}{127}x^2\f$
  */
-int quadraticAcceleration(int input /*! input from the controller (an int between -127 and 127) */) {
+int quadraticAccelerationGeneral(int input /*! input from the controller (an int between -127 and 127) */, float max) {
 	if (input < 0) {
-		return (int) ((1.0/127.0) * input * input * -1);
+		return (int) ((1.0 / max) * input * input * -1);
 	}
 	else {
-		return (int) ((1.0/127.0) * input * input);
+		return (int) ((1.0 / max) * input * input);
 	}
+}
+
+int quadraticAcceleration(int input /*! input from the controller (an int between -127 and 127) */) {
+	return quadraticAccelerationGeneral(input, 127.0);
 }
 
 void move(short power, int turn, int duration) {
@@ -30,7 +34,41 @@ void lift(short power, int duration) {
 	motor[port10] = 0;
 }
 
-void lift(short power) {
+void liftManual(short power) { // overloaded
 	motor[port1] = power;
 	motor[port10] = power;
+}
+
+short getMoveRight(short power, int turn) {
+	return power + turn;
+}
+
+short getMoveLeft(short power, int turn) {
+	return power - turn;
+}
+
+void step(short rightPower, short leftPower, short liftPower, int ms) {
+	motor[port1] = liftPower;
+	motor[port10] = liftPower;
+	motor[port2] = rightPower;
+	motor[port3] = leftPower;
+	wait1Msec(ms);
+	motor[port1] = 0;
+	motor[port10] = 0;
+	motor[port2] = 0;
+	motor[port3] = 0;
+}
+
+void liftWithFinesse(short power, int duration) {
+	for (int i = 1; i >= 10; i++) {
+		motor[port1] = power / 10 * i;
+	  motor[port10] = power / 10 * i;
+	  wait1Msec(30);
+	}
+	motor[port1] = power;
+  motor[port10] = power;
+
+	wait1Msec(duration - 600);
+	motor[port1] = 0;
+	motor[port10] = 0;
 }
