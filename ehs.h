@@ -29,14 +29,20 @@ void move(short power, int turn, int duration) {
 void lift(short power, int duration) {
 	motor[port1] = power;
 	motor[port10] = power;
+	motor[port4] = power;
+	motor[port5] = power;
 	wait1Msec(duration);
 	motor[port1] = 0;
 	motor[port10] = 0;
+	motor[port4] = 0;
+	motor[port5] = 0;
 }
 
-void liftManual(short power) { // overloaded
+void liftManual(short power) {
 	motor[port1] = power;
 	motor[port10] = power;
+	motor[port4] = power;
+	motor[port5] = power;
 }
 
 short getMoveRight(short power, int turn) {
