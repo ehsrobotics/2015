@@ -9,26 +9,41 @@
 
 // function prototypes
 void lift(short power);
+void move();
+void rotate();
+int quadraticAcceleration(int input);
 
 task main() {
 	while (true) {
 		lift(vexRT[Ch1]);
-		if(vexRT[Btn7L] == false|| vexRT[Btn7R] == false)
+		if(vexRT[Btn7L] == 0 || vexRT[Btn7R] == 0)
 			move();
 		else
 			rotate();
+		if (vexRT[Btn6U == 1) {
+			motor[clawOC] = 50;
+		}
+		else if (vexRT[Btn6D == 1) {
+			motor[clawOC] = -50;
+		}
+		if (vexRT[Btn5U] == 1) {
+			motor[clawR] = 64;
+	  }
+	  if (vexRT[Btn6U] == 1) {
+			motor[clawR] = -64;
+	  }
 	}
 }
 
 void lift(short power) {
-	motor[lift] = power;
+	motor[arm] = power;
 }
 
 void move(){
-	motor[baseLeft] = quadraticAcceleration(vexRT[Ch3]);
-	motor[baseRight] = quadraticAcceleration(vexRT[Ch3]);
-	motor[baseBack] = quadraticAcceleration(vexRT[Ch4]);
-	motor[baseFront] = quadraticAcceleration(vexRT[Ch4]);
+	motor[baseLeft] = quadraticAcceleration(vexRT[Ch3]) - vexRT[Ch4] / 2;
+	motor[baseRight] = quadraticAcceleration(vexRT[Ch3]) - vexRT[Ch4] / 2;
+	motor[baseBack] = vexRT[Ch4] / 2;
+	motor[baseFront] = vexRT[Ch4] / 2;
 }
 
 void rotate(){
@@ -44,5 +59,14 @@ void rotate(){
 		motor[baseFront] = -64;
 		motor[baseLeft] = 64;
 		motor[baseRight] = 64;
+	}
+}
+
+int quadraticAcceleration(int input /*! input from the controller (an int between -127 and 127) */) {
+	if (input < 0) {
+		return (int) ((1.0 / 127.0) * input * input * -1);
+	}
+	else {
+		return (int) ((1.0 / 127.0) * input * input);
 	}
 }
