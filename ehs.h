@@ -38,11 +38,16 @@ void lift(short power, int duration) {
 	motor[port5] = 0;
 }
 
+short simonAcceleration(short input) {
+	// adjust sensitivity to Simon's own custom made curve
+	return (short) (7.0 * pow(input - 115.0, 1.0/1.96) + 78.8 );
+}
+
 void liftManual(short power) {
-	motor[port1] = simonAcceleration(power);
-	motor[port10] = simonAcceleration(power);
-	motor[port4] = simonAcceleration(power);
-	motor[port5] = simonAcceleration(power);
+	motor[port1] = -1*quadraticAcceleration(power);
+	motor[port10] = -1*quadraticAcceleration(power);
+	motor[port4] = -1*quadraticAcceleration(power);
+	motor[port5] = quadraticAcceleration(power);
 }
 
 short getMoveRight(short power, int turn) {
@@ -56,13 +61,17 @@ short getMoveLeft(short power, int turn) {
 void step(short rightPower, short leftPower, short liftPower, int ms) {
 	motor[port1] = liftPower;
 	motor[port10] = liftPower;
-	motor[port2] = liftPower;
-	motor[port3] = liftPower;
+	motor[port2] = leftPower;
+	motor[port3] = rightPower;
+	motor[port6] = leftPower;
+	motor[port7] = rightPower;
 	wait1Msec(ms);
 	motor[port1] = 0;
 	motor[port10] = 0;
 	motor[port2] = 0;
 	motor[port3] = 0;
+	motor[port4] = 0;
+	motor[port5] = 0;
 }
 
 void liftWithFinesse(short power, int duration) {
@@ -77,9 +86,4 @@ void liftWithFinesse(short power, int duration) {
 	wait1Msec(duration - 600);
 	motor[port1] = 0;
 	motor[port10] = 0;
-}
-
-short simonAcceleration(short input) {
-	// adjust sensitivity to Simon's own custom made curve
-	return (short) (7.0 * pow(input - 115.0, 1.0/1.96) + 78.8 );
 }
